@@ -256,6 +256,11 @@ ssl_port: <%= p("router.tls_port") %>
 
 disable_http: <%= p("router.disable_http") %>
 
+only_trust_client_ca_certs: <%= p("router.only_trust_client_ca_certs") %>
+<% if p("router.only_trust_client_ca_certs") == true && p("router.client_ca_certs") == ""
+  raise 'kittens'
+end %>
+
 <% if p("router.ca_certs")
      ca_certs = p("router.ca_certs")
      if !ca_certs.is_a?(String)
@@ -278,7 +283,6 @@ disable_http: <%= p("router.disable_http") %>
 <%= { 'client_ca_certs' => client_ca_certs }.to_yaml[3..-1] %>
 <% end %>
 
-only_trust_client_ca_certs: <%= p("router.only_trust_client_ca_certs") %>
 
 skip_ssl_validation: <%= p("router.ssl_skip_validation") %>
 cipher_suites: <%= p("router.cipher_suites") %>

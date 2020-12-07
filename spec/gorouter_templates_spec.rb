@@ -431,6 +431,16 @@ describe 'gorouter' do
               it 'sets only_trust_client_ca_certs to true' do
                 expect(parsed_yaml['only_trust_client_ca_certs']).to equal(true)
               end
+
+              context 'and no client_ca_certs are provided' do
+                before do
+                  deployment_manifest_fragment['router']['client_ca_certs'] = ''
+                end
+
+                it 'returns a helpful error message' do
+                  expect { parsed_yaml }.to raise_error('kittens')
+                end
+              end
             end
 
             context 'when only_trust_client_ca_certs is false' do
