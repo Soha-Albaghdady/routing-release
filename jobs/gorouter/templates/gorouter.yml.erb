@@ -75,6 +75,7 @@ trace_key: <%= p("router.trace_key") %>
 debug_addr: <%= p("router.debug_address") %>
 secure_cookies: <%= p("router.secure_cookies") %>
 sticky_session_cookie_names: <%= p("router.sticky_session_cookie_names") %>
+enable_sticky_sessions_for_apps_with_route_services: <%= p("router.enable_sticky_sessions_for_apps_with_route_services") %>
 
 access_log:
   file: <%= p("router.write_access_logs_locally") ? "/var/vcap/sys/log/gorouter/access.log" : "" %>

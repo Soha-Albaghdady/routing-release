@@ -225,21 +225,39 @@ describe 'gorouter' do
           end
         end
       end
-      describe 'sticky_session_cookies' do
-        context 'when no value is provided' do
-          it 'should use JSESSIONID' do
-            expect(parsed_yaml['sticky_session_cookie_names']).to match_array(['JSESSIONID'])
+      describe 'sticky sessions' do
+        describe 'cookies' do
+          context 'when no cookie_names value is provided' do
+            it 'should use JSESSIONID' do
+              expect(parsed_yaml['sticky_session_cookie_names']).to match_array(['JSESSIONID'])
+            end
+          end
+          context 'when multiple cookies are provided' do
+            before do
+              deployment_manifest_fragment['router']['sticky_session_cookie_names'] = %w[meow bark]
+            end
+            it 'should use all of the cookies in the config' do
+              expect(parsed_yaml['sticky_session_cookie_names']).to match_array(%w[meow bark])
+            end
           end
         end
-        context 'when multiple cookies are provided' do
-          before do
-            deployment_manifest_fragment['router']['sticky_session_cookie_names'] = %w[meow bark]
+
+        describe 'enable_sticky_sessions_for_apps_with_route_services' do
+          it 'should default to true' do
+            expect(parsed_yaml['enable_sticky_sessions_for_apps_with_route_services']).to eq(true)
           end
-          it 'should use all of the cookies in the config' do
-            expect(parsed_yaml['sticky_session_cookie_names']).to match_array(%w[meow bark])
+
+          context 'when configured' do
+            before do
+              deployment_manifest_fragment['router']['enable_sticky_sessions_for_apps_with_route_services'] = false
+            end
+            it 'is set in the manifest' do
+              expect(parsed_yaml['enable_sticky_sessions_for_apps_with_route_services']).to eq(false)
+            end
           end
         end
       end
+
       describe 'client_cert_validation' do
         context 'when no override is provided' do
           it 'should default to none' do
